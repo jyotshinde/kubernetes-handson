@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-probe
+  labels:
+    test: livenessProbe
+spec:
