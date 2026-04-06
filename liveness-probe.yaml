@@ -5,3 +5,29 @@ metadata:
   labels:
     test: livenessProbe
 spec:
+  containers:
+    - name: my-app
+      image: registry.k8s.io/e2e-test-images/agnhost:2.40
+      args:
+        - /bin/sh
+        - -c
+        - touch /tmp/healthy; sleep 600
+      ports:
+        - containerPort: 8080
+
+      readinessProbe:
+        httpGet:
+          path: /healthz
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 10
+
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: 8080
+          httpHeaders:
+            - name: Custom-Header
+              value: Awesome
+        initialDelaySeconds: 5
+        periodSeconds: 10
