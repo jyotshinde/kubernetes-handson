@@ -1,0 +1,36 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: ingress-demo
+  region: ap-southeast-1
+  tags:
+    project: ingress-demo
+
+availabilityZones:
+  - ap-southeast-1a
+  - ap-southeast-1b
+
+iam:
+  withOIDC: true
+
+managedNodeGroups:
+  - name: ingress-demo-priv-ng
+    instanceType: t3.small
+    minSize: 2
+    maxSize: 2
+    privateNetworking: true
+    volumeSize: 20
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        externalDNS: false
+        certManager: yes
+        ebs: false
+        fsx: false
+        efs: false
+        albIngress: true
+        xRay: false
+        cloudWatch: false
+    labels:
+      lifecycle: ec2-autoscaler
